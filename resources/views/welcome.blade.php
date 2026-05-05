@@ -91,7 +91,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($featured as $place)
-                <a href="{{ route('places.show', $place->place_id) }}" class="place-card block animate-fade-slide-up">
+                <a href="{{ route('places.show', $place->place_id) }}" class="place-card group block animate-fade-slide-up">
                     {{-- Cover --}}
                     <div class="relative h-44 bg-gradient-to-br from-brand-100 to-amber-100 overflow-hidden">
                         @if($place->cover_photo_url)

@@ -154,7 +154,7 @@
                 @forelse($places as $place)
                     <a href="{{ route('places.show', $place->place_id) }}"
                        wire:navigate
-                       class="place-card block {{ $place->promos->isNotEmpty() ? 'place-card-sponsored' : '' }}">
+                       class="place-card group block {{ $place->promos->isNotEmpty() ? 'place-card-sponsored' : '' }}">
 
                         {{-- Gambar --}}
                         <div class="relative h-40 bg-gradient-to-br from-brand-100 to-amber-100 overflow-hidden">

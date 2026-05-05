@@ -14,7 +14,7 @@
         @else
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 @foreach($places as $place)
-                    <a href="{{ route('places.show', $place->place_id) }}" wire:navigate class="place-card block">
+                    <a href="{{ route('places.show', $place->place_id) }}" wire:navigate class="place-card group block">
                         <div class="h-40 bg-gradient-to-br from-brand-100 to-amber-100 flex items-center justify-center">
                             <span class="text-4xl opacity-30">
                                 {{ $place->category === 'cafe' ? '☕' : ($place->category === 'coworking' ? '💼' : '📚') }}
