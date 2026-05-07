@@ -1,9 +1,11 @@
 <x-layouts.app>
     {{-- Hero Section --}}
-    <section class="relative overflow-hidden bg-gradient-to-br from-orange-50 via-white to-amber-50 pt-16 pb-24">
+    <section class="relative bg-gradient-to-br from-orange-50 via-white to-amber-50 pt-16 pb-24">
         {{-- Decorative blobs --}}
-        <div class="absolute top-0 right-0 w-96 h-96 bg-brand-100 rounded-full blur-3xl opacity-30 -translate-y-1/2 translate-x-1/2"></div>
-        <div class="absolute bottom-0 left-0 w-64 h-64 bg-amber-100 rounded-full blur-3xl opacity-40 translate-y-1/2 -translate-x-1/2"></div>
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-brand-100 rounded-full blur-3xl opacity-30 -translate-y-1/2 translate-x-1/2"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-amber-100 rounded-full blur-3xl opacity-40 translate-y-1/2 -translate-x-1/2"></div>
+        </div>
 
         <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-50 border border-brand-200 rounded-full text-sm text-brand-700 font-medium mb-6">
@@ -57,7 +59,7 @@
     </section>
 
     {{-- Category Shortcuts --}}
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
+    <section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             @foreach([
                 ['label' => 'Kafe', 'category' => 'cafe', 'emoji' => '☕', 'bg' => 'bg-amber-50 border-amber-200 hover:bg-amber-100'],
