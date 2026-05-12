@@ -25,7 +25,7 @@ class Promo extends Model
     {
         return [
             'start_date' => 'date',
-            'end_date'   => 'date',
+            'end_date' => 'date',
         ];
     }
 
@@ -37,7 +37,7 @@ class Promo extends Model
     public function scopeActive($query)
     {
         return $query->where('status', 'active')
-                     ->whereDate('start_date', '<=', now())
-                     ->whereDate('end_date', '>=', now());
+            ->whereDate('start_date', '<=', now())
+            ->whereDate('end_date', '>=', now());
     }
 }

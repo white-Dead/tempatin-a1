@@ -25,8 +25,8 @@ class ReviewModeration extends Component
     public function render()
     {
         $reviews = Review::with(['user', 'place'])
-            ->when($this->filter === 'pending', fn($q) => $q->where('is_verified', false))
-            ->when($this->filter === 'approved', fn($q) => $q->where('is_verified', true))
+            ->when($this->filter === 'pending', fn ($q) => $q->where('is_verified', false))
+            ->when($this->filter === 'approved', fn ($q) => $q->where('is_verified', true))
             ->orderByDesc('created_at')
             ->paginate(20);
 

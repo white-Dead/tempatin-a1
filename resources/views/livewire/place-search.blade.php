@@ -68,6 +68,17 @@
                         <option value="ramai">🎵 Ramai</option>
                     </select>
                 </div>
+                
+                    {{-- AC only --}}
+                    <label class="flex items-center gap-2.5 cursor-pointer p-3 mt-3 bg-white rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors">
+                        <input type="checkbox"
+                               wire:model.live="hasAc"
+                               class="rounded text-brand-500 border-slate-300 focus:ring-brand-400 focus:ring-offset-0">
+                        <div>
+                            <span class="text-sm font-medium text-slate-700">Hanya tempat dengan AC</span>
+                            <p class="text-xs text-slate-400 mt-0.5">Tampilkan tempat yang menyediakan AC</p>
+                        </div>
+                    </label>
 
                 {{-- Harga Maks --}}
                 <div class="mb-5">
@@ -92,6 +103,17 @@
                         <p class="text-xs text-brand-400 mt-0.5">Butuh akses lokasi</p>
                     </div>
                 </label>
+
+                {{-- WiFi only --}}
+                <label class="flex items-center gap-2.5 cursor-pointer p-3 mt-3 bg-white rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors">
+                    <input type="checkbox"
+                           wire:model.live="hasWifi"
+                           class="rounded text-brand-500 border-slate-300 focus:ring-brand-400 focus:ring-offset-0">
+                    <div>
+                        <span class="text-sm font-medium text-slate-700">Hanya tempat dengan WiFi</span>
+                        <p class="text-xs text-slate-400 mt-0.5">Tampilkan tempat yang menyediakan WiFi</p>
+                    </div>
+                </label>
             </div>
         </aside>
 
@@ -105,8 +127,8 @@
                         <span class="text-brand-600 font-bold">{{ $places->count() }}</span> tempat ditemukan
                     </span>
                     <div wire:loading
-                         wire:target="search,facilities,city,priceMax,noiseLevel,nearbyOnly"
-                         class="flex items-center gap-1.5 text-sm text-brand-500">
+                        wire:target="search,facilities,city,priceMax,noiseLevel,nearbyOnly,hasWifi,hasAc"
+                        class="flex items-center gap-1.5 text-sm text-brand-500">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
@@ -143,12 +165,24 @@
                             <button wire:click="$set('nearbyOnly', false)" class="hover:text-brand-900">✕</button>
                         </span>
                     @endif
+                    @if($hasWifi)
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-sm">
+                            📶 Ada WiFi
+                            <button wire:click="$set('hasWifi', false)" class="hover:text-brand-900">✕</button>
+                        </span>
+                    @endif
+                    @if($hasAc)
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-sm">
+                            ❄️ Ada AC
+                            <button wire:click="$set('hasAc', false)" class="hover:text-brand-900">✕</button>
+                        </span>
+                    @endif
                 </div>
             @endif
 
             {{-- Daftar Tempat --}}
-            <div wire:loading.class="opacity-50 pointer-events-none"
-                 wire:target="search,facilities,city,priceMax,noiseLevel,nearbyOnly"
+              <div wire:loading.class="opacity-50 pointer-events-none"
+                  wire:target="search,facilities,city,priceMax,noiseLevel,nearbyOnly,hasWifi,hasAc"
                  class="grid grid-cols-1 sm:grid-cols-2 gap-5 transition-opacity duration-200">
 
                 @forelse($places as $place)

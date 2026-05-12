@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PlaceController;
-use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admin\PlaceController as AdminPlaceController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PartnerController;
+use App\Http\Controllers\PlaceController;
 use Illuminate\Support\Facades\Route;
 
 // --- Public Routes ---
@@ -18,9 +18,9 @@ require __DIR__.'/auth.php';
 
 // --- User Dashboard ---
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+    Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
     Route::get('/favorit', [PlaceController::class, 'favorites'])->name('places.favorites');
-    Route::get('/profil', fn() => view('profile.edit'))->name('profile.edit');
+    Route::get('/profil', fn () => view('profile.edit'))->name('profile.edit');
 });
 
 // --- Partner Routes ---
@@ -35,6 +35,6 @@ Route::middleware(['auth', 'partner'])->prefix('mitra')->name('partner.')->group
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminDashboard::class, 'index'])->name('dashboard');
     Route::get('/tempat', [AdminPlaceController::class, 'index'])->name('places.index');
-    Route::get('/ulasan', fn() => view('admin.reviews'))->name('reviews');
-    Route::get('/mitra', fn() => view('admin.partners'))->name('partners');
+    Route::get('/ulasan', fn () => view('admin.reviews'))->name('reviews');
+    Route::get('/mitra', fn () => view('admin.partners'))->name('partners');
 });

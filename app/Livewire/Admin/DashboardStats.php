@@ -3,9 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\ActivityLog;
-use App\Models\Place;
 use App\Models\Review;
-use App\Models\User;
 use Livewire\Component;
 
 class DashboardStats extends Component

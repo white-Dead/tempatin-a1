@@ -16,6 +16,12 @@ class PlaceSearch extends Component
     public array $facilities = [];
 
     #[Url]
+    public bool $hasWifi = false;
+
+    #[Url]
+    public bool $hasAc = false;
+
+    #[Url]
     public string $city = '';
 
     #[Url]
@@ -49,6 +55,8 @@ class PlaceSearch extends Component
         $this->priceMax   = '';
         $this->noiseLevel = '';
         $this->nearbyOnly = false;
+        $this->hasWifi    = false;
+        $this->hasAc      = false;
     }
 
     public function render()
@@ -67,6 +75,8 @@ class PlaceSearch extends Component
             )
             ->when($this->city, fn($q) => $q->where('city', $this->city))
             ->when($this->facilities, fn($q) => $q->hasFacilities($this->facilities))
+            ->when($this->hasWifi, fn($q) => $q->whereHas('facilities', fn($qq) => $qq->where('facility_name', 'wifi')))
+            ->when($this->hasAc, fn($q) => $q->whereHas('facilities', fn($qq) => $qq->where('facility_name', 'ac')))
             ->when($this->priceMax, fn($q) =>
                 $q->whereRaw("CAST(SUBSTRING_INDEX(price_range, '-', 1) AS UNSIGNED) <= ?", [$this->priceMax])
             )

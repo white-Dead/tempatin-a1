@@ -31,7 +31,7 @@ class Place extends Model
     protected function casts(): array
     {
         return [
-            'latitude'  => 'float',
+            'latitude' => 'float',
             'longitude' => 'float',
             'data_completeness_score' => 'integer',
         ];
@@ -47,7 +47,7 @@ class Place extends Model
     public function facilities()
     {
         return $this->belongsToMany(Facility::class, 'place_facilities', 'place_id', 'facility_id', 'place_id', 'facility_id')
-                    ->withPivot('notes');
+            ->withPivot('notes');
     }
 
     public function reviews()
@@ -68,9 +68,9 @@ class Place extends Model
     public function promos()
     {
         return $this->hasMany(Promo::class, 'place_id', 'place_id')
-                    ->where('status', 'active')
-                    ->whereDate('start_date', '<=', now())
-                    ->whereDate('end_date', '>=', now());
+            ->where('status', 'active')
+            ->whereDate('start_date', '<=', now())
+            ->whereDate('end_date', '>=', now());
     }
 
     public function favorites()
@@ -95,12 +95,12 @@ class Place extends Model
             ->whereBetween('latitude', [$lat - $latRange, $lat + $latRange])
             ->whereBetween('longitude', [$lng - $lngRange, $lng + $lngRange])
             ->selectRaw(
-                "places.*,
+                'places.*,
                 (6371 * acos(
                     cos(radians(?)) * cos(radians(latitude))
                     * cos(radians(longitude) - radians(?))
                     + sin(radians(?)) * sin(radians(latitude))
-                )) AS distance_km",
+                )) AS distance_km',
                 [$lat, $lng, $lat]
             )
             ->having('distance_km', '<=', $radiusKm)
@@ -110,8 +110,9 @@ class Place extends Model
     public function scopeHasFacilities($query, array $facilityNames)
     {
         foreach ($facilityNames as $name) {
-            $query->whereHas('facilities', fn($q) => $q->where('facility_name', $name));
+            $query->whereHas('facilities', fn ($q) => $q->where('facility_name', $name));
         }
+
         return $query;
     }
 
@@ -140,11 +141,21 @@ class Place extends Model
     public function recalculateCompleteness(): void
     {
         $score = 0;
-        if ($this->address)       $score += 20;
-        if ($this->opening_hours) $score += 20;
-        if ($this->price_range)   $score += 15;
-        if ($this->description)   $score += 15;
-        if ($this->facilities->count() > 0) $score += 20;
+        if ($this->address) {
+            $score += 20;
+        }
+        if ($this->opening_hours) {
+            $score += 20;
+        }
+        if ($this->price_range) {
+            $score += 15;
+        }
+        if ($this->description) {
+            $score += 15;
+        }
+        if ($this->facilities->count() > 0) {
+            $score += 20;
+        }
 
         $photoCount = $this->photos()->count();
         $score += min(10, $photoCount * 5);

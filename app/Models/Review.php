@@ -25,10 +25,10 @@ class Review extends Model
     protected function casts(): array
     {
         return [
-            'is_verified'    => 'boolean',
-            'rating_wifi'    => 'integer',
+            'is_verified' => 'boolean',
+            'rating_wifi' => 'integer',
             'rating_comfort' => 'integer',
-            'rating_socket'  => 'integer',
+            'rating_socket' => 'integer',
             'rating_overall' => 'integer',
         ];
     }

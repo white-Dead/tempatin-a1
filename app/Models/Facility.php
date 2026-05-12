@@ -19,6 +19,6 @@ class Facility extends Model
     public function places()
     {
         return $this->belongsToMany(Place::class, 'place_facilities', 'facility_id', 'place_id', 'facility_id', 'place_id')
-                    ->withPivot('notes');
+            ->withPivot('notes');
     }
 }

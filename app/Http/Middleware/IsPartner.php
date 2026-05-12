@@ -9,7 +9,7 @@ class IsPartner
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!auth()->check() || !auth()->user()->isPartner()) {
+        if (! auth()->check() || ! auth()->user()->isPartner()) {
             abort(403, 'Akses khusus mitra.');
         }
 

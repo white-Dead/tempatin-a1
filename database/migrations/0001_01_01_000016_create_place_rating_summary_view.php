@@ -7,7 +7,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement("
+        DB::statement('
             CREATE OR REPLACE VIEW place_rating_summary AS
             SELECT
                 place_id,
@@ -19,7 +19,7 @@ return new class extends Migration
             FROM reviews
             WHERE is_verified = 1
             GROUP BY place_id
-        ");
+        ');
     }
 
     public function down(): void

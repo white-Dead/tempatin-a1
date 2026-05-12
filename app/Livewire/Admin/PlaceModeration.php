@@ -17,8 +17,15 @@ class PlaceModeration extends Component
     #[Url]
     public string $search = '';
 
-    public function updatedStatusFilter(): void { $this->resetPage(); }
-    public function updatedSearch(): void { $this->resetPage(); }
+    public function updatedStatusFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
 
     public function approve(int $placeId): void
     {
@@ -38,10 +45,9 @@ class PlaceModeration extends Component
     public function render()
     {
         $places = Place::with(['partner.user', 'facilities'])
-            ->when($this->statusFilter, fn($q) => $q->where('status', $this->statusFilter))
-            ->when($this->search, fn($q) =>
-                $q->where('place_name', 'like', "%{$this->search}%")
-                  ->orWhere('city', 'like', "%{$this->search}%")
+            ->when($this->statusFilter, fn ($q) => $q->where('status', $this->statusFilter))
+            ->when($this->search, fn ($q) => $q->where('place_name', 'like', "%{$this->search}%")
+                ->orWhere('city', 'like', "%{$this->search}%")
             )
             ->orderByDesc('created_at')
             ->paginate(15);

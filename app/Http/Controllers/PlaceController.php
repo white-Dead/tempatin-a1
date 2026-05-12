@@ -20,8 +20,8 @@ class PlaceController extends Controller
         $place->load(['facilities', 'verifiedReviews.user', 'promos', 'photos']);
 
         ActivityLog::create([
-            'user_id'    => auth()->id(),
-            'place_id'   => $place->place_id,
+            'user_id' => auth()->id(),
+            'place_id' => $place->place_id,
             'action_type' => 'view_profile',
             'created_at' => now(),
         ]);
@@ -40,10 +40,10 @@ class PlaceController extends Controller
         ]);
 
         ActivityLog::create([
-            'user_id'     => auth()->id(),
-            'place_id'    => $place->place_id,
+            'user_id' => auth()->id(),
+            'place_id' => $place->place_id,
             'action_type' => $request->action_type,
-            'created_at'  => now(),
+            'created_at' => now(),
         ]);
 
         return response()->json(['ok' => true]);
@@ -52,6 +52,7 @@ class PlaceController extends Controller
     public function favorites()
     {
         $places = auth()->user()->favoritePlaces()->with(['facilities'])->paginate(12);
+
         return view('places.favorites', compact('places'));
     }
 }

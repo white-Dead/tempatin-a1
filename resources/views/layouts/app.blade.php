@@ -32,7 +32,7 @@
             <div class="flex items-center justify-between h-16">
 
                 {{-- Logo --}}
-                <a href="{{ route('home') }}" wire:navigate class="flex items-center gap-2">
+                <a href="{{ route('home') }}" class="flex items-center gap-2">
                     <div class="w-8 h-8 bg-gradient-brand rounded-lg flex items-center justify-center">
                         <span class="text-white font-bold text-sm">T</span>
                     </div>
@@ -41,7 +41,7 @@
 
                 {{-- Nav Links (desktop) --}}
                 <div class="hidden md:flex items-center gap-1">
-                    <a href="{{ route('home') }}" wire:navigate
+                    <a href="{{ route('home') }}"
                        class="{{ request()->routeIs('home') ? 'nav-link-active' : 'nav-link' }}">Beranda</a>
                     <a href="{{ route('places.index') }}" wire:navigate
                        class="{{ request()->routeIs('places.index') ? 'nav-link-active' : 'nav-link' }}">Jelajah</a>

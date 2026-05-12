@@ -31,6 +31,19 @@
         </div>
 
         <div>
+            <label class="input-label">Daftar sebagai</label>
+            <div class="flex gap-3 mt-2">
+                <label class="inline-flex items-center gap-2">
+                    <input type="radio" name="role" value="user" {{ old('role', 'user') === 'user' ? 'checked' : '' }}>
+                    <span class="text-sm">Pengguna</span>
+                </label>
+                <label class="inline-flex items-center gap-2">
+                    <input type="radio" name="role" value="partner" {{ old('role') === 'partner' ? 'checked' : '' }}>
+                    <span class="text-sm">Mitra (pemilik tempat)</span>
+                </label>
+            </div>
+        </div>
+        <div>
             <label class="input-label">Password <span class="text-rose-400">*</span></label>
             <input type="password" name="password" required
                    class="input @error('password') border-rose-300 @enderror"

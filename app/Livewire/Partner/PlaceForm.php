@@ -11,34 +11,46 @@ class PlaceForm extends Component
 {
     use WithFileUploads;
 
-    public ?int   $placeId      = null;
-    public string $placeName    = '';
-    public string $category     = 'cafe';
-    public string $address      = '';
-    public string $city         = '';
-    public string $latitude     = '';
-    public string $longitude    = '';
-    public string $priceRange   = '';
+    public ?int $placeId = null;
+
+    public string $placeName = '';
+
+    public string $category = 'cafe';
+
+    public string $address = '';
+
+    public string $city = '';
+
+    public string $latitude = '';
+
+    public string $longitude = '';
+
+    public string $priceRange = '';
+
     public string $openingHours = '';
-    public string $description  = '';
-    public string $noiseLevel   = 'sedang';
-    public array  $selectedFacilities = [];
+
+    public string $description = '';
+
+    public string $noiseLevel = 'sedang';
+
+    public array $selectedFacilities = [];
+
     public $photos = [];
 
     protected function rules(): array
     {
         return [
-            'placeName'    => 'required|string|max:150',
-            'category'     => 'required|in:cafe,coworking,restoran,perpustakaan,lainnya',
-            'address'      => 'required|string',
-            'city'         => 'required|string|max:100',
-            'latitude'     => 'required|numeric|between:-90,90',
-            'longitude'    => 'required|numeric|between:-180,180',
-            'priceRange'   => 'nullable|string|max:50',
+            'placeName' => 'required|string|max:150',
+            'category' => 'required|in:cafe,coworking,restoran,perpustakaan,lainnya',
+            'address' => 'required|string',
+            'city' => 'required|string|max:100',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
+            'priceRange' => 'nullable|string|max:50',
             'openingHours' => 'nullable|string|max:255',
-            'description'  => 'nullable|string|max:2000',
-            'noiseLevel'   => 'required|in:tenang,sedang,ramai',
-            'photos.*'     => 'nullable|image|max:3072',
+            'description' => 'nullable|string|max:2000',
+            'noiseLevel' => 'required|in:tenang,sedang,ramai',
+            'photos.*' => 'nullable|image|max:3072',
         ];
     }
 
@@ -46,17 +58,17 @@ class PlaceForm extends Component
     {
         if ($placeId) {
             $place = Place::with('facilities')->findOrFail($placeId);
-            $this->placeId            = $place->place_id;
-            $this->placeName          = $place->place_name;
-            $this->category           = $place->category;
-            $this->address            = $place->address;
-            $this->city               = $place->city;
-            $this->latitude           = (string) $place->latitude;
-            $this->longitude          = (string) $place->longitude;
-            $this->priceRange         = $place->price_range ?? '';
-            $this->openingHours       = $place->opening_hours ?? '';
-            $this->description        = $place->description ?? '';
-            $this->noiseLevel         = $place->noise_level;
+            $this->placeId = $place->place_id;
+            $this->placeName = $place->place_name;
+            $this->category = $place->category;
+            $this->address = $place->address;
+            $this->city = $place->city;
+            $this->latitude = (string) $place->latitude;
+            $this->longitude = (string) $place->longitude;
+            $this->priceRange = $place->price_range ?? '';
+            $this->openingHours = $place->opening_hours ?? '';
+            $this->description = $place->description ?? '';
+            $this->noiseLevel = $place->noise_level;
             $this->selectedFacilities = $place->facilities->pluck('facility_id')->toArray();
         }
     }
@@ -68,18 +80,18 @@ class PlaceForm extends Component
         $partner = auth()->user()->partner;
 
         $data = [
-            'partner_id'   => $partner->partner_id,
-            'place_name'   => $this->placeName,
-            'category'     => $this->category,
-            'address'      => $this->address,
-            'city'         => $this->city,
-            'latitude'     => $this->latitude,
-            'longitude'    => $this->longitude,
-            'price_range'  => $this->priceRange,
+            'partner_id' => $partner->partner_id,
+            'place_name' => $this->placeName,
+            'category' => $this->category,
+            'address' => $this->address,
+            'city' => $this->city,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
+            'price_range' => $this->priceRange,
             'opening_hours' => $this->openingHours,
-            'description'  => $this->description,
-            'noise_level'  => $this->noiseLevel,
-            'status'       => 'pending_review',
+            'description' => $this->description,
+            'noise_level' => $this->noiseLevel,
+            'status' => 'pending_review',
         ];
 
         $place = $this->placeId
