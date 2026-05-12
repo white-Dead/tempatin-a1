@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#fff7ed"/>
+  <rect x="80" y="76" width="640" height="448" rx="34" fill="#ffffff"/>
+  <circle cx="400" cy="284" r="150" fill="#fed7aa"/>
+  <path d="M245 316c42-88 118-132 228-132 54 0 94 16 120 48-104 2-190 38-258 108-36 0-66-8-90-24z" fill="#f59e0b"/>
+  <path d="M325 230c44 22 70 54 78 96" fill="none" stroke="#92400e" stroke-width="14" stroke-linecap="round"/>
+  <path d="M420 220c34 24 54 54 60 90" fill="none" stroke="#92400e" stroke-width="14" stroke-linecap="round"/>
+  <text x="400" y="470" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#334155">Croissant</text>
+</svg>

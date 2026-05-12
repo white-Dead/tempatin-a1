@@ -57,19 +57,43 @@
             💡 Cara mudah cari koordinat: buka Google Maps, klik kanan lokasi → salin koordinat.
         </p>
 
-        {{-- Harga & Jam Buka --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        {{-- Harga --}}
+        <div>
             <div>
                 <label class="input-label">Rentang Harga</label>
                 <input type="text" wire:model="priceRange" class="input" placeholder="10000-35000">
                 <p class="text-xs text-slate-400 mt-1">Format: min-max (contoh: 10000-35000). Isi 0-0 jika gratis.</p>
                 @error('priceRange') <p class="text-rose-400 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
-            <div>
-                <label class="input-label">Jam Operasional</label>
-                <input type="text" wire:model="openingHours" class="input" placeholder="08:00-22:00">
-                @error('openingHours') <p class="text-rose-400 text-xs mt-1">{{ $message }}</p> @enderror
+        </div>
+
+        {{-- Jam Buka Harian --}}
+        <div>
+            <label class="input-label">Jam Operasional Harian</label>
+            <div class="space-y-3 mt-2">
+                @foreach($dayLabels as $day => $label)
+                    <div class="grid grid-cols-1 sm:grid-cols-[1fr_1fr_1fr_auto] gap-3 rounded-xl border border-slate-200 bg-white p-3">
+                        <div class="flex items-center">
+                            <span class="text-sm font-semibold text-slate-700">{{ $label }}</span>
+                        </div>
+                        <input type="time"
+                               wire:model="operatingHours.{{ $day }}.opens_at"
+                               @disabled($operatingHours[$day]['is_closed'])
+                               class="input">
+                        <input type="time"
+                               wire:model="operatingHours.{{ $day }}.closes_at"
+                               @disabled($operatingHours[$day]['is_closed'])
+                               class="input">
+                        <label class="flex items-center gap-2 text-sm font-medium text-slate-500">
+                            <input type="checkbox"
+                                   wire:model.live="operatingHours.{{ $day }}.is_closed"
+                                   class="rounded text-brand-500 border-slate-300 focus:ring-brand-400 focus:ring-offset-0">
+                            Tutup
+                        </label>
+                    </div>
+                @endforeach
             </div>
+            <p class="text-xs text-slate-400 mt-2">Centang tutup jika tempat tidak buka pada hari tersebut.</p>
         </div>
 
         {{-- Suasana --}}

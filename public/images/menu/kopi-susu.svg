@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#fff7ed"/>
+  <rect x="70" y="70" width="660" height="460" rx="32" fill="#ffffff"/>
+  <circle cx="390" cy="282" r="132" fill="#fed7aa"/>
+  <path d="M295 230h180l-20 150H315z" fill="#9a3412"/>
+  <path d="M320 205h130a32 32 0 0 1 32 32H288a32 32 0 0 1 32-32z" fill="#fb923c"/>
+  <rect x="330" y="255" width="110" height="82" rx="16" fill="#ffedd5"/>
+  <text x="400" y="470" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#334155">Kopi Susu</text>
+</svg>

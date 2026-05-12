@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#fff1f2"/>
+  <rect x="80" y="76" width="640" height="448" rx="34" fill="#ffffff"/>
+  <circle cx="400" cy="284" r="150" fill="#fecdd3"/>
+  <ellipse cx="400" cy="342" rx="156" ry="48" fill="#94a3b8"/>
+  <path d="M285 300c54-40 94-40 148 0s94 40 148 0" fill="none" stroke="#d97706" stroke-width="22" stroke-linecap="round"/>
+  <path d="M300 260c46-32 82-32 128 0s82 32 128 0" fill="none" stroke="#f59e0b" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="494" cy="302" r="18" fill="#ef4444"/>
+  <text x="400" y="470" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#334155">Mie Goreng</text>
+</svg>

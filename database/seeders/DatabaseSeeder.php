@@ -94,6 +94,7 @@ class DatabaseSeeder extends Seeder
         );
 
         $this->call([
+            AppSettingSeeder::class,
             FacilitySeeder::class,
             PlaceSeeder::class,
         ]);

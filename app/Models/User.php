@@ -19,6 +19,7 @@ class User extends Authenticatable
         'phone',
         'role',
         'status',
+        'premium_ends_at',
     ];
 
     protected $hidden = [
@@ -30,6 +31,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'premium_ends_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -62,5 +64,10 @@ class User extends Authenticatable
     public function isPartner(): bool
     {
         return in_array($this->role, ['partner', 'partner_admin']);
+    }
+
+    public function isPremium(): bool
+    {
+        return $this->premium_ends_at?->isFuture() ?? false;
     }
 }

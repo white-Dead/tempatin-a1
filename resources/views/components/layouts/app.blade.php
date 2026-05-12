@@ -48,6 +48,8 @@
                     @auth
                         <a href="{{ route('places.favorites') }}" wire:navigate
                            class="{{ request()->routeIs('places.favorites') ? 'nav-link-active' : 'nav-link' }}">Favorit</a>
+                        <a href="{{ route('subscriptions.index') }}" wire:navigate
+                           class="{{ request()->routeIs('subscriptions.*') ? 'nav-link-active' : 'nav-link' }}">Langganan</a>
                     @endauth
                 </div>
 

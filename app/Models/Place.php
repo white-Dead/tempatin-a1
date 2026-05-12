@@ -65,6 +65,19 @@ class Place extends Model
         return $this->hasMany(PlacePhoto::class, 'place_id', 'place_id');
     }
 
+    public function operatingHours()
+    {
+        return $this->hasMany(PlaceOperatingHour::class, 'place_id', 'place_id')
+            ->orderBy('day_of_week');
+    }
+
+    public function menuItems()
+    {
+        return $this->hasMany(PlaceMenuItem::class, 'place_id', 'place_id')
+            ->orderBy('sort_order')
+            ->orderBy('menu_name');
+    }
+
     public function promos()
     {
         return $this->hasMany(Promo::class, 'place_id', 'place_id')

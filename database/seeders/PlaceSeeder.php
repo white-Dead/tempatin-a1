@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\Facility;
 use App\Models\Place;
+use App\Models\PlaceMenuItem;
+use App\Models\PlaceMenuItemPhoto;
+use App\Models\PlaceOperatingHour;
 use Illuminate\Database\Seeder;
 
 class PlaceSeeder extends Seeder
@@ -219,6 +222,125 @@ class PlaceSeeder extends Seeder
 
             $facilityIds = Facility::whereIn('facility_name', $facilityNames)->pluck('facility_id');
             $place->facilities()->sync($facilityIds);
+
+            foreach ($this->menuItemsFor($data['category']) as $index => $menuItem) {
+                $photoUrls = $menuItem['photo_urls'] ?? [$menuItem['photo_url']];
+                unset($menuItem['photo_urls']);
+
+                $item = PlaceMenuItem::query()->updateOrCreate(
+                    [
+                        'place_id' => $place->place_id,
+                        'menu_name' => $menuItem['menu_name'],
+                    ],
+                    array_merge($menuItem, [
+                        'place_id' => $place->place_id,
+                        'sort_order' => $index + 1,
+                    ])
+                );
+
+                foreach (array_values(array_filter($photoUrls)) as $photoIndex => $photoUrl) {
+                    PlaceMenuItemPhoto::query()->updateOrCreate(
+                        [
+                            'menu_item_id' => $item->menu_item_id,
+                            'photo_url' => $photoUrl,
+                        ],
+                        [
+                            'sort_order' => $photoIndex + 1,
+                        ]
+                    );
+                }
+            }
+
+            foreach ($this->operatingHoursFor($data['category'], $data['opening_hours'] ?? null) as $hours) {
+                $place->operatingHours()->updateOrCreate(
+                    ['day_of_week' => $hours['day_of_week']],
+                    $hours
+                );
+            }
         }
+    }
+
+    private function operatingHoursFor(string $category, ?string $defaultHours): array
+    {
+        [$defaultOpen, $defaultClose] = $this->splitHours($defaultHours);
+
+        return collect(PlaceOperatingHour::DAY_LABELS)
+            ->map(function (string $label, int $day) use ($category, $defaultOpen, $defaultClose) {
+                $isWeekend = in_array($day, [6, 7], true);
+                $isFriday = $day === 5;
+
+                if ($category === 'perpustakaan' && $day === 7) {
+                    return [
+                        'day_of_week' => $day,
+                        'opens_at' => null,
+                        'closes_at' => null,
+                        'is_closed' => true,
+                    ];
+                }
+
+                $opensAt = $defaultOpen;
+                $closesAt = $defaultClose;
+
+                if ($isFriday && $category !== 'perpustakaan') {
+                    $opensAt = $defaultOpen ?: '09:00';
+                    $closesAt = '23:00';
+                }
+
+                if ($isWeekend) {
+                    $opensAt = $category === 'perpustakaan' ? '09:00' : ($defaultOpen ?: '08:00');
+                    $closesAt = match ($category) {
+                        'coworking' => '20:00',
+                        'perpustakaan' => '15:00',
+                        'restoran' => '22:00',
+                        default => '23:00',
+                    };
+                }
+
+                return [
+                    'day_of_week' => $day,
+                    'opens_at' => $opensAt,
+                    'closes_at' => $closesAt,
+                    'is_closed' => false,
+                ];
+            })
+            ->values()
+            ->all();
+    }
+
+    private function splitHours(?string $hours): array
+    {
+        if (! $hours || ! str_contains($hours, '-')) {
+            return ['08:00', '22:00'];
+        }
+
+        [$open, $close] = array_map('trim', explode('-', $hours, 2));
+
+        return [$open ?: '08:00', $close ?: '22:00'];
+    }
+
+    private function menuItemsFor(string $category): array
+    {
+        return match ($category) {
+            'coworking' => [
+                ['menu_name' => 'Kopi Susu Fokus', 'category' => 'Minuman', 'price' => 18000, 'photo_url' => '/images/menu/kopi-susu.svg', 'photo_urls' => ['/images/menu/kopi-susu.svg', '/images/menu/americano.svg']],
+                ['menu_name' => 'Tea Break Set', 'category' => 'Minuman', 'price' => 15000, 'photo_url' => '/images/menu/tea-break.svg', 'photo_urls' => ['/images/menu/tea-break.svg', '/images/menu/air-mineral.svg']],
+                ['menu_name' => 'Snack Meeting', 'category' => 'Makanan', 'price' => 22000, 'photo_url' => '/images/menu/snack.svg', 'photo_urls' => ['/images/menu/snack.svg', '/images/menu/croissant.svg']],
+            ],
+            'perpustakaan' => [
+                ['menu_name' => 'Air Mineral', 'category' => 'Minuman', 'price' => 5000, 'photo_url' => '/images/menu/air-mineral.svg', 'photo_urls' => ['/images/menu/air-mineral.svg']],
+                ['menu_name' => 'Teh Hangat', 'category' => 'Minuman', 'price' => 7000, 'photo_url' => '/images/menu/tea-break.svg', 'photo_urls' => ['/images/menu/tea-break.svg', '/images/menu/air-mineral.svg']],
+                ['menu_name' => 'Roti Isi', 'category' => 'Makanan', 'price' => 10000, 'photo_url' => '/images/menu/snack.svg', 'photo_urls' => ['/images/menu/snack.svg', '/images/menu/croissant.svg']],
+            ],
+            'restoran' => [
+                ['menu_name' => 'Nasi Ayam Sambal Matah', 'category' => 'Makanan', 'price' => 25000, 'photo_url' => '/images/menu/nasi-ayam.svg', 'photo_urls' => ['/images/menu/nasi-ayam.svg', '/images/menu/mie-goreng.svg']],
+                ['menu_name' => 'Mie Goreng Produktif', 'category' => 'Makanan', 'price' => 22000, 'photo_url' => '/images/menu/mie-goreng.svg', 'photo_urls' => ['/images/menu/mie-goreng.svg', '/images/menu/nasi-ayam.svg']],
+                ['menu_name' => 'Es Teh Lemon', 'category' => 'Minuman', 'price' => 12000, 'photo_url' => '/images/menu/tea-break.svg', 'photo_urls' => ['/images/menu/tea-break.svg', '/images/menu/air-mineral.svg']],
+            ],
+            default => [
+                ['menu_name' => 'Kopi Susu Gula Aren', 'category' => 'Minuman', 'price' => 18000, 'photo_url' => '/images/menu/kopi-susu.svg', 'photo_urls' => ['/images/menu/kopi-susu.svg', '/images/menu/americano.svg']],
+                ['menu_name' => 'Americano', 'category' => 'Minuman', 'price' => 15000, 'photo_url' => '/images/menu/americano.svg', 'photo_urls' => ['/images/menu/americano.svg', '/images/menu/kopi-susu.svg']],
+                ['menu_name' => 'Croissant Butter', 'category' => 'Makanan', 'price' => 20000, 'photo_url' => '/images/menu/snack.svg', 'photo_urls' => ['/images/menu/snack.svg', '/images/menu/croissant.svg']],
+            ],
+        };
     }
 }

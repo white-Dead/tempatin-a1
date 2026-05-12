@@ -34,6 +34,13 @@
                 </a>
             @endif
 
+            @unless(auth()->user()->isAdmin())
+                <a href="{{ route('subscriptions.index') }}" wire:navigate
+                   class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-600 hover:bg-brand-50 hover:text-brand-600">
+                    Langganan Premium
+                </a>
+            @endunless
+
             <div class="border-t border-slate-100 my-1"></div>
 
             <form method="POST" action="{{ route('logout') }}">

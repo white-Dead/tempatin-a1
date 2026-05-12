@@ -17,7 +17,7 @@ class PlaceController extends Controller
     {
         abort_if($place->status !== 'active', 404);
 
-        $place->load(['facilities', 'verifiedReviews.user', 'promos', 'photos']);
+        $place->load(['facilities', 'verifiedReviews.user', 'promos', 'photos', 'menuItems.photos', 'operatingHours']);
 
         ActivityLog::create([
             'user_id' => auth()->id(),

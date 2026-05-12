@@ -1,7 +1,7 @@
 <x-layouts.app>
     <x-slot name="title">{{ $place->place_name }}</x-slot>
 
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ menuOpen: false, activeMenuPhoto: null, activeMenuPhotos: [], activeMenuName: '' }">
 
         {{-- Breadcrumb --}}
         <nav class="flex items-center gap-2 text-sm text-slate-400 mb-6">
@@ -68,15 +68,31 @@
                             <p class="text-xs text-slate-400">{{ $place->total_reviews }} ulasan</p>
                         </div>
                         <div class="text-center">
-                            <p class="font-bold text-slate-700 mb-1">
-                                @if($place->price_range)
-                                    @php [$min, $max] = explode('-', $place->price_range); @endphp
-                                    Rp {{ number_format($min, 0, ',', '.') }}
-                                @else
-                                    Gratis
-                                @endif
-                            </p>
-                            <p class="text-xs text-slate-400">Harga mulai</p>
+                            @if($place->menuItems->isNotEmpty())
+                                <button type="button"
+                                        @click="menuOpen = true; activeMenuPhoto = null; activeMenuPhotos = []; activeMenuName = ''"
+                                        class="group inline-flex flex-col items-center rounded-xl px-3 py-1 transition-colors hover:bg-brand-50">
+                                    <span class="font-bold text-slate-700 group-hover:text-brand-600">
+                                        @if($place->price_range)
+                                            @php [$min, $max] = explode('-', $place->price_range); @endphp
+                                            Rp {{ number_format($min, 0, ',', '.') }}
+                                        @else
+                                            Gratis
+                                        @endif
+                                    </span>
+                                    <span class="text-xs text-brand-500">Lihat menu</span>
+                                </button>
+                            @else
+                                <p class="font-bold text-slate-700 mb-1">
+                                    @if($place->price_range)
+                                        @php [$min, $max] = explode('-', $place->price_range); @endphp
+                                        Rp {{ number_format($min, 0, ',', '.') }}
+                                    @else
+                                        Gratis
+                                    @endif
+                                </p>
+                                <p class="text-xs text-slate-400">Harga mulai</p>
+                            @endif
                         </div>
                         <div class="text-center">
                             <p class="font-bold text-slate-700 mb-1">
@@ -109,6 +125,42 @@
                     <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
                         <h2 class="text-lg font-semibold text-slate-700 mb-3">Tentang Tempat Ini</h2>
                         <p class="text-slate-500 leading-relaxed">{{ $place->description }}</p>
+                    </div>
+                @endif
+
+                {{-- Menu Makanan & Minuman --}}
+                @if($place->menuItems->isNotEmpty())
+                    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                        <div class="flex items-center justify-between gap-4 mb-4">
+                            <div>
+                                <h2 class="text-lg font-semibold text-slate-700">Menu Makanan & Minuman</h2>
+                                <p class="text-sm text-slate-400 mt-1">Klik item untuk melihat foto menu dan harganya.</p>
+                            </div>
+                            <button type="button" @click="menuOpen = true; activeMenuPhoto = null; activeMenuPhotos = []; activeMenuName = ''" class="btn-secondary text-sm">
+                                Lihat Semua
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            @foreach($place->menuItems->take(4) as $item)
+                                @php
+                                    $menuPhotos = $item->photos->map->src()->values();
+                                    if ($menuPhotos->isEmpty() && $item->photoSrc()) {
+                                        $menuPhotos = collect([$item->photoSrc()]);
+                                    }
+                                    $menuPhoto = $menuPhotos->first();
+                                @endphp
+                                <button type="button"
+                                        @click="menuOpen = true; activeMenuPhotos = @js($menuPhotos); activeMenuPhoto = @js($menuPhoto); activeMenuName = @js($item->menu_name)"
+                                        class="flex items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-left hover:border-brand-200 hover:bg-brand-50 transition-colors">
+                                    <span>
+                                        <span class="block text-sm font-semibold text-slate-700">{{ $item->menu_name }}</span>
+                                        <span class="block text-xs text-slate-400">{{ $item->category ?? 'Menu' }}</span>
+                                    </span>
+                                    <span class="text-sm font-bold text-brand-600">Rp {{ number_format($item->price, 0, ',', '.') }}</span>
+                                </button>
+                            @endforeach
+                        </div>
                     </div>
                 @endif
 
@@ -195,7 +247,20 @@
                         </svg>
                         Jam Operasional
                     </h3>
-                    <p class="text-slate-500 text-sm">{{ $place->opening_hours ?? 'Belum tersedia' }}</p>
+                    @if($place->operatingHours->isNotEmpty())
+                        <div class="space-y-2">
+                            @foreach($place->operatingHours as $hours)
+                                <div class="flex items-center justify-between gap-3 rounded-xl bg-slate-50 px-3 py-2">
+                                    <span class="text-sm font-medium text-slate-600">{{ $hours->dayLabel() }}</span>
+                                    <span class="{{ $hours->is_closed ? 'text-rose-500' : 'text-slate-500' }} text-sm font-semibold">
+                                        {{ $hours->timeRange() }}
+                                    </span>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="text-slate-500 text-sm">{{ $place->opening_hours ?? 'Belum tersedia' }}</p>
+                    @endif
                 </div>
 
                 {{-- Aksi --}}
@@ -248,5 +313,79 @@
                 </div>
             </div>
         </div>
+
+        @if($place->menuItems->isNotEmpty())
+            {{-- Menu Modal --}}
+            <div x-show="menuOpen"
+                 x-transition.opacity
+                 class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 px-4 py-6"
+                 style="display: none;">
+                <div class="absolute inset-0" @click="menuOpen = false"></div>
+                <div class="relative max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-2xl">
+                    <div class="flex items-center justify-between gap-4 border-b border-slate-100 px-5 py-4">
+                        <div>
+                            <h2 class="text-lg font-bold text-slate-700">Menu {{ $place->place_name }}</h2>
+                            <p class="text-sm text-slate-400">Foto menu dan harga bisa dilihat dari daftar di bawah.</p>
+                        </div>
+                        <button type="button"
+                                @click="menuOpen = false"
+                                class="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+                            x
+                        </button>
+                    </div>
+
+                    <div class="grid max-h-[calc(90vh-73px)] grid-cols-1 overflow-y-auto lg:grid-cols-5">
+                        <div class="lg:col-span-2 border-b border-slate-100 bg-slate-50 p-5 lg:border-b-0 lg:border-r">
+                            <div class="aspect-[4/3] overflow-hidden rounded-xl bg-white border border-slate-100">
+                                <template x-if="activeMenuPhoto">
+                                    <img :src="activeMenuPhoto" :alt="activeMenuName" class="h-full w-full object-cover">
+                                </template>
+                                <template x-if="!activeMenuPhoto">
+                                    <div class="flex h-full flex-col items-center justify-center px-6 text-center">
+                                        <p class="text-sm font-semibold text-slate-600" x-text="activeMenuName || 'Pilih menu'"></p>
+                                        <p class="mt-2 text-xs leading-relaxed text-slate-400">
+                                            Foto menu akan tampil di sini jika sudah tersedia. Beberapa menu memiliki lebih dari satu foto.
+                                        </p>
+                                    </div>
+                                </template>
+                            </div>
+                            <div x-show="activeMenuPhotos.length > 1" class="mt-3 grid grid-cols-4 gap-2">
+                                <template x-for="photo in activeMenuPhotos" :key="photo">
+                                    <button type="button"
+                                            @click="activeMenuPhoto = photo"
+                                            class="aspect-square overflow-hidden rounded-lg border bg-white"
+                                            :class="activeMenuPhoto === photo ? 'border-brand-400 ring-2 ring-brand-100' : 'border-slate-100'">
+                                        <img :src="photo" :alt="activeMenuName" class="h-full w-full object-cover">
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-3 divide-y divide-slate-100">
+                            @foreach($place->menuItems as $item)
+                                @php
+                                    $menuPhotos = $item->photos->map->src()->values();
+                                    if ($menuPhotos->isEmpty() && $item->photoSrc()) {
+                                        $menuPhotos = collect([$item->photoSrc()]);
+                                    }
+                                    $menuPhoto = $menuPhotos->first();
+                                @endphp
+                                <button type="button"
+                                        @click="activeMenuPhotos = @js($menuPhotos); activeMenuPhoto = @js($menuPhoto); activeMenuName = @js($item->menu_name)"
+                                        class="flex w-full items-center justify-between gap-4 px-5 py-4 text-left hover:bg-brand-50">
+                                    <span>
+                                        <span class="block font-semibold text-slate-700">{{ $item->menu_name }}</span>
+                                        <span class="block text-sm text-slate-400">{{ $item->category ?? 'Menu' }}</span>
+                                    </span>
+                                    <span class="flex-shrink-0 font-bold text-brand-600">
+                                        Rp {{ number_format($item->price, 0, ',', '.') }}
+                                    </span>
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 </x-layouts.app>

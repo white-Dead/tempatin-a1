@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f8fafc"/>
+  <rect x="86" y="82" width="628" height="436" rx="34" fill="#ffffff"/>
+  <circle cx="400" cy="278" r="136" fill="#e2e8f0"/>
+  <path d="M285 250h196v88a74 74 0 0 1-74 74h-48a74 74 0 0 1-74-74z" fill="#78350f"/>
+  <path d="M481 270h46a42 42 0 0 1 0 84h-46v-30h43a12 12 0 0 0 0-24h-43z" fill="#92400e"/>
+  <rect x="265" y="230" width="235" height="36" rx="18" fill="#d97706"/>
+  <text x="400" y="470" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#334155">Americano</text>
+</svg>

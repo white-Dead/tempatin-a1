@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#fefce8"/>
+  <rect x="80" y="76" width="640" height="448" rx="34" fill="#ffffff"/>
+  <circle cx="400" cy="278" r="138" fill="#fde68a"/>
+  <path d="M260 352c42-118 112-176 246-180 30 34 42 76 34 126-80 8-154 30-222 68z" fill="#f59e0b"/>
+  <path d="M330 246c58 6 108 26 150 62" fill="none" stroke="#92400e" stroke-width="14" stroke-linecap="round"/>
+  <text x="400" y="470" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#334155">Snack</text>
+</svg>

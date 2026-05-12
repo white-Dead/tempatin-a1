@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f0fdf4"/>
+  <rect x="80" y="76" width="640" height="448" rx="34" fill="#ffffff"/>
+  <circle cx="400" cy="284" r="150" fill="#dcfce7"/>
+  <ellipse cx="400" cy="330" rx="160" ry="46" fill="#94a3b8"/>
+  <circle cx="350" cy="270" r="62" fill="#ffffff"/>
+  <path d="M410 230c62 4 106 42 112 94-58 18-114 10-166-24 8-32 26-56 54-70z" fill="#b45309"/>
+  <path d="M474 255l38-36" stroke="#ef4444" stroke-width="16" stroke-linecap="round"/>
+  <text x="400" y="470" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#334155">Nasi Ayam</text>
+</svg>

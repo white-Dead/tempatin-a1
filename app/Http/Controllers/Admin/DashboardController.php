@@ -19,6 +19,8 @@ class DashboardController extends Controller
             'total_reviews' => Review::count(),
             'pending_reviews' => Review::where('is_verified', false)->count(),
             'total_users' => User::where('role', 'user')->count(),
+            'premium_users' => User::where('role', 'user')
+                ->where('premium_ends_at', '>', now())->count(),
             'total_partners' => User::whereIn('role', ['partner', 'partner_admin'])->count(),
             'views_today' => ActivityLog::whereDate('created_at', today())
                 ->where('action_type', 'view_profile')->count(),
