@@ -22,6 +22,24 @@ class PlaceSearch extends Component
     public bool $hasAc = false;
 
     #[Url]
+    public bool $hasStopKontak = false;
+
+    #[Url]
+    public bool $hasMusholla = false;
+
+    #[Url]
+    public bool $hasToilet = false;
+
+    #[Url]
+    public bool $hasCarParking = false;
+
+    #[Url]
+    public bool $hasMotorcycleParking = false;
+
+    #[Url]
+    public bool $hasParkingAttendant = false;
+
+    #[Url]
     public string $city = '';
 
     #[Url]
@@ -57,6 +75,12 @@ class PlaceSearch extends Component
         $this->nearbyOnly = false;
         $this->hasWifi    = false;
         $this->hasAc      = false;
+        $this->hasStopKontak = false;
+        $this->hasMusholla = false;
+        $this->hasToilet = false;
+        $this->hasCarParking = false;
+        $this->hasMotorcycleParking = false;
+        $this->hasParkingAttendant = false;
     }
 
     public function render()
@@ -77,6 +101,12 @@ class PlaceSearch extends Component
             ->when($this->facilities, fn($q) => $q->hasFacilities($this->facilities))
             ->when($this->hasWifi, fn($q) => $q->whereHas('facilities', fn($qq) => $qq->where('facility_name', 'wifi')))
             ->when($this->hasAc, fn($q) => $q->whereHas('facilities', fn($qq) => $qq->where('facility_name', 'ac')))
+            ->when($this->hasStopKontak, fn($q) => $q->whereHas('facilities', fn($qq) => $qq->where('facility_name', 'stop_kontak')))
+            ->when($this->hasMusholla, fn($q) => $q->whereHas('facilities', fn($qq) => $qq->where('facility_name', 'musholla')))
+            ->when($this->hasToilet, fn($q) => $q->whereHas('facilities', fn($qq) => $qq->where('facility_name', 'toilet')))
+            ->when($this->hasCarParking, fn($q) => $q->whereHas('facilities', fn($qq) => $qq->whereIn('facility_name', ['parkir_mobil', 'parkir'])))
+            ->when($this->hasMotorcycleParking, fn($q) => $q->whereHas('facilities', fn($qq) => $qq->whereIn('facility_name', ['parkir_motor', 'parkir'])))
+            ->when($this->hasParkingAttendant, fn($q) => $q->whereHas('facilities', fn($qq) => $qq->where('facility_name', 'tukang_parkir')))
             ->when($this->priceMax, fn($q) =>
                 $q->whereRaw("CAST(SUBSTRING_INDEX(price_range, '-', 1) AS UNSIGNED) <= ?", [$this->priceMax])
             )

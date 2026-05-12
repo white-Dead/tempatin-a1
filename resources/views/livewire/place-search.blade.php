@@ -68,18 +68,6 @@
                         <option value="ramai">🎵 Ramai</option>
                     </select>
                 </div>
-                
-                    {{-- AC only --}}
-                    <label class="flex items-center gap-2.5 cursor-pointer p-3 mt-3 bg-white rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors">
-                        <input type="checkbox"
-                               wire:model.live="hasAc"
-                               class="rounded text-brand-500 border-slate-300 focus:ring-brand-400 focus:ring-offset-0">
-                        <div>
-                            <span class="text-sm font-medium text-slate-700">Hanya tempat dengan AC</span>
-                            <p class="text-xs text-slate-400 mt-0.5">Tampilkan tempat yang menyediakan AC</p>
-                        </div>
-                    </label>
-
                 {{-- Harga Maks --}}
                 <div class="mb-5">
                     <label class="input-label">Harga Maksimum</label>
@@ -104,16 +92,29 @@
                     </div>
                 </label>
 
-                {{-- WiFi only --}}
-                <label class="flex items-center gap-2.5 cursor-pointer p-3 mt-3 bg-white rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors">
-                    <input type="checkbox"
-                           wire:model.live="hasWifi"
-                           class="rounded text-brand-500 border-slate-300 focus:ring-brand-400 focus:ring-offset-0">
-                    <div>
-                        <span class="text-sm font-medium text-slate-700">Hanya tempat dengan WiFi</span>
-                        <p class="text-xs text-slate-400 mt-0.5">Tampilkan tempat yang menyediakan WiFi</p>
+                {{-- Quick facility filters --}}
+                <div class="mt-5">
+                    <label class="input-label">Fasilitas Utama</label>
+                    <div class="space-y-2 mt-2">
+                        @foreach([
+                            ['model' => 'hasWifi', 'label' => 'WiFi'],
+                            ['model' => 'hasAc', 'label' => 'AC'],
+                            ['model' => 'hasStopKontak', 'label' => 'Stop Kontak'],
+                            ['model' => 'hasMusholla', 'label' => 'Musholla'],
+                            ['model' => 'hasToilet', 'label' => 'Toilet'],
+                            ['model' => 'hasCarParking', 'label' => 'Parkir Mobil'],
+                            ['model' => 'hasMotorcycleParking', 'label' => 'Parkir Motor'],
+                            ['model' => 'hasParkingAttendant', 'label' => 'Tukang Parkir'],
+                        ] as $filter)
+                            <label class="flex items-center gap-2.5 cursor-pointer rounded-xl border border-slate-200 bg-white px-3 py-2.5 hover:bg-slate-50 transition-colors">
+                                <input type="checkbox"
+                                       wire:model.live="{{ $filter['model'] }}"
+                                       class="rounded text-brand-500 border-slate-300 focus:ring-brand-400 focus:ring-offset-0">
+                                <span class="text-sm font-medium text-slate-700">{{ $filter['label'] }}</span>
+                            </label>
+                        @endforeach
                     </div>
-                </label>
+                </div>
             </div>
         </aside>
 
@@ -127,7 +128,7 @@
                         <span class="text-brand-600 font-bold">{{ $places->count() }}</span> tempat ditemukan
                     </span>
                     <div wire:loading
-                        wire:target="search,facilities,city,priceMax,noiseLevel,nearbyOnly,hasWifi,hasAc"
+                        wire:target="search,facilities,city,priceMax,noiseLevel,nearbyOnly,hasWifi,hasAc,hasStopKontak,hasMusholla,hasToilet,hasCarParking,hasMotorcycleParking,hasParkingAttendant"
                         class="flex items-center gap-1.5 text-sm text-brand-500">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
@@ -139,7 +140,7 @@
             </div>
 
             {{-- Active Filters --}}
-            @if($search || $facilities || $city || $priceMax || $noiseLevel || $nearbyOnly)
+            @if($search || $facilities || $city || $priceMax || $noiseLevel || $nearbyOnly || $hasWifi || $hasAc || $hasStopKontak || $hasMusholla || $hasToilet || $hasCarParking || $hasMotorcycleParking || $hasParkingAttendant)
                 <div class="flex flex-wrap gap-2 mb-5">
                     @if($search)
                         <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-sm">
@@ -177,12 +178,48 @@
                             <button wire:click="$set('hasAc', false)" class="hover:text-brand-900">✕</button>
                         </span>
                     @endif
+                    @if($hasStopKontak)
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-sm">
+                            Stop Kontak
+                            <button wire:click="$set('hasStopKontak', false)" class="hover:text-brand-900">x</button>
+                        </span>
+                    @endif
+                    @if($hasMusholla)
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-sm">
+                            Musholla
+                            <button wire:click="$set('hasMusholla', false)" class="hover:text-brand-900">x</button>
+                        </span>
+                    @endif
+                    @if($hasToilet)
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-sm">
+                            Toilet
+                            <button wire:click="$set('hasToilet', false)" class="hover:text-brand-900">x</button>
+                        </span>
+                    @endif
+                    @if($hasCarParking)
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-sm">
+                            Parkir Mobil
+                            <button wire:click="$set('hasCarParking', false)" class="hover:text-brand-900">x</button>
+                        </span>
+                    @endif
+                    @if($hasMotorcycleParking)
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-sm">
+                            Parkir Motor
+                            <button wire:click="$set('hasMotorcycleParking', false)" class="hover:text-brand-900">x</button>
+                        </span>
+                    @endif
+                    @if($hasParkingAttendant)
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-sm">
+                            Tukang Parkir
+                            <button wire:click="$set('hasParkingAttendant', false)" class="hover:text-brand-900">x</button>
+                        </span>
+                    @endif
                 </div>
             @endif
 
             {{-- Daftar Tempat --}}
               <div wire:loading.class="opacity-50 pointer-events-none"
-                  wire:target="search,facilities,city,priceMax,noiseLevel,nearbyOnly,hasWifi,hasAc"
+                  wire:target="search,facilities,city,priceMax,noiseLevel,nearbyOnly,hasWifi,hasAc,hasStopKontak,hasMusholla,hasToilet,hasCarParking,hasMotorcycleParking,hasParkingAttendant"
                  class="grid grid-cols-1 sm:grid-cols-2 gap-5 transition-opacity duration-200">
 
                 @forelse($places as $place)
