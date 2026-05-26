@@ -37,6 +37,11 @@ class Partner extends Model
         return $this->hasMany(Place::class, 'partner_id', 'partner_id');
     }
 
+    public function posIntegration()
+    {
+        return $this->hasOne(PartnerPosIntegration::class, 'partner_id', 'partner_id');
+    }
+
     public function isActive(): bool
     {
         return $this->status === 'active';

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admin\PlaceController as AdminPlaceController;
+use App\Http\Controllers\Partner\PosIntegrationController;
 use App\Http\Controllers\Admin\SubscriptionSettingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PartnerController;
@@ -34,6 +35,7 @@ Route::middleware(['auth', 'partner'])->prefix('mitra')->name('partner.')->group
     Route::get('/tempat/tambah', [PartnerController::class, 'createPlace'])->name('place.create');
     Route::get('/tempat/{place}/edit', [PartnerController::class, 'editPlace'])->name('place.edit');
     Route::get('/promo', [PartnerController::class, 'promos'])->name('promos');
+    Route::get('/integrasi-kasir', [PosIntegrationController::class, 'index'])->name('pos.index');
 });
 
 // --- Admin Routes ---

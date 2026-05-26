@@ -16,6 +16,10 @@ class PlaceMenuItem extends Model
         'price',
         'photo_url',
         'sort_order',
+        'source',
+        'is_available',
+        'external_id',
+        'last_synced_at',
     ];
 
     protected function casts(): array
@@ -23,6 +27,8 @@ class PlaceMenuItem extends Model
         return [
             'price' => 'integer',
             'sort_order' => 'integer',
+            'is_available' => 'boolean',
+            'last_synced_at' => 'datetime',
         ];
     }
 
@@ -35,6 +41,11 @@ class PlaceMenuItem extends Model
     {
         return $this->hasMany(PlaceMenuItemPhoto::class, 'menu_item_id', 'menu_item_id')
             ->orderBy('sort_order');
+    }
+
+    public function posMenuItem()
+    {
+        return $this->hasOne(PosMenuItem::class, 'menu_item_id', 'menu_item_id');
     }
 
     public function photoSrc(): ?string

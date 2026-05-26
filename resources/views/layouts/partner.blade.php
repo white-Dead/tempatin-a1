@@ -31,6 +31,10 @@
                    class="{{ request()->routeIs('partner.place.create') ? 'flex items-center gap-3 px-3 py-2.5 bg-brand-50 text-brand-700 rounded-xl font-semibold text-sm' : 'flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 rounded-xl text-sm' }}">
                     + Tambah Tempat
                 </a>
+                <a href="{{ route('partner.pos.index') }}" wire:navigate
+                   class="{{ request()->routeIs('partner.pos.*') ? 'flex items-center gap-3 px-3 py-2.5 bg-brand-50 text-brand-700 rounded-xl font-semibold text-sm' : 'flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 rounded-xl text-sm' }}">
+                    Integrasi Kasir
+                </a>
                 <a href="{{ route('home') }}" class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 rounded-xl text-sm">
                     Lihat Situs
                 </a>
